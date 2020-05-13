@@ -20,7 +20,7 @@ Future<File> _getFile(String fileName) async {
   }
 }
 
-Future<void> writeFile(String fileName, String jsonString) async {
+Future<void> writeFile(String fileName, var jsonString) async {
   try {
     final file = await _getFile(fileName);
     return await file.writeAsString(jsonEncode(jsonString));
