@@ -30,12 +30,12 @@ Future<void> writeFile(String fileName, var jsonString) async {
   }
 }
 
-Future<String> readFile(String fileName) async {
+Future readFile(String fileName) async {
   try {
     final file = await _getFile(fileName);
     if (file != null) {
       var contents = await file.readAsString();
-      String fileData = await jsonDecode(contents);
+      var fileData = await jsonDecode(contents);
       return fileData;
     }
     return null;
