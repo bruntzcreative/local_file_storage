@@ -12,8 +12,7 @@ Future<String> get localPath async {
 Future<File> _getFile(String fileName) async {
   try {
     final String path = await localPath;
-
-    return File('$path/$fileName');
+    return await File('$path/$fileName').exists() ? File('$path/$fileName'):null;
   } catch (e) {
     print('error getting file $fileName: $e');
     return null;
