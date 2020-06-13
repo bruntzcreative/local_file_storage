@@ -9,7 +9,17 @@ Future<String> get localPath async {
   return directory.path;
 }
 
-Future<File> _getFile(String fileName) async {
+Future<File> _getFileRead(String fileName) async {
+  try {
+    final String path = await localPath;
+    return await File('$path/$fileName').exists() ? File('$path/$fileName') : null;
+  } catch (e) {
+    print('error getting file $fileName: $e');
+    return null;
+  }
+}
+
+Future<File> _getFileWrite(String fileName) async {
   try {
     final String path = await localPath;
 
@@ -22,7 +32,7 @@ Future<File> _getFile(String fileName) async {
 
 Future<File> writeFile(String fileName, var jsonString) async {
   try {
-    final file = await _getFile(fileName);
+    final file = await _getFileWrite(fileName);
     return await file.writeAsString(jsonEncode(jsonString));
   } catch (e) {
     print('error writing file $fileName: $e');
@@ -32,7 +42,7 @@ Future<File> writeFile(String fileName, var jsonString) async {
 
 Future readFile(String fileName) async {
   try {
-    final file = await _getFile(fileName);
+    final file = await _getFileRead(fileName);
     if (file != null) {
       var contents = await file.readAsString();
       var fileData = await jsonDecode(contents);
@@ -46,7 +56,7 @@ Future readFile(String fileName) async {
 }
 
 Future<File> deleteFile(String fileName) async {
-  final file = await _getFile(fileName);
+  final file = await _getFileRead(fileName);
   if (file != null) {
     try {
       return await file.delete();
